@@ -7,8 +7,11 @@
 
 from locale import setlocale, LC_ALL
 from logging import getLogger
-from typing import Any
-from schema import Schema
+from typing import Any, Iterable
+from schema import (
+    Schema,
+    Optional
+)
 
 
 log = getLogger(__name__)                               # Instantiate logger.
@@ -24,11 +27,34 @@ class Validate():
         schema: Schema
             ) -> bool:
         '''
-        Validate an arbitrary data model against a user-defined schema.
-            :param data:    The data model to validate.
+        Validate an arbitrary data object against a user-defined schema.
+            :param data:    The data object to validate.
             :param schema:  The data schema to match.
         '''
         return schema.is_valid(data)                    # Validate the data against the schema.
+
+    @staticmethod
+    def dict_contains_keys(
+        data: dict,
+        keys: Iterable,
+        strict: bool = False
+            ) -> bool:
+        '''
+        Validate that a dictionary contains all specified keys.
+            :param data:    The dictionary to validate.
+            :param keys:    Iterable containing the keys to check for.
+            :param strict:  Flag to ensure that the dictionary contains no additional keys.
+        '''
+        data_object = {
+            key: object
+            for key
+            in keys
+        }
+
+        if not strict:                                  # Add optional arbitrary keys to dict.
+            data_object = data_object | {Optional(object): object}
+
+        return Validate._generic_schema(data, Schema(data_object))
 
     @staticmethod
     def list_of_dicts(
@@ -52,3 +78,4 @@ class Validate():
             schema = Schema([dict])                     # List of dicts.
 
         return Validate._generic_schema(data, schema)
+

@@ -22,7 +22,7 @@ setlocale(LC_ALL, 'en_US.UTF-8')                        # Set locale.
 class Validate():
     '''Validate various data schemas.'''
     @staticmethod
-    def _generic_schema(
+    def _arbitrary_schema(
         data: Any,
         schema: Schema
             ) -> bool:
@@ -54,7 +54,7 @@ class Validate():
         if not strict:                                  # Add optional arbitrary keys to dict.
             data_object = data_object | {Optional(object): object}
 
-        return Validate._generic_schema(data, Schema(data_object))
+        return Validate._arbitrary_schema(data, Schema(data_object))
 
     @staticmethod
     def list_of_dicts(
@@ -77,5 +77,4 @@ class Validate():
         else:
             schema = Schema([dict])                     # List of dicts.
 
-        return Validate._generic_schema(data, schema)
-
+        return Validate._arbitrary_schema(data, schema)

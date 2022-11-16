@@ -25,8 +25,7 @@ def none(
     boolean_iterable: Iterable
         ) -> bool:
     '''
-    Returns True if the iterable contains no True elements.
-    The opposite of the any() built-in.
+    The opposite of the any() built-in; returns True if the iterable contains no True elements.
         :param boolean_iterable:    An iterable containing elements to be assessed as booleans.
     '''
     return not any(boolean_iterable)

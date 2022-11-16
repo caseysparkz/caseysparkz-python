@@ -8,19 +8,16 @@
 # Author:       Casey Sparks
 # Date:         November 15, 2022
 
-__all__ = [
-    'data_manipulation'
-]
-
-from .__version__ import (
-    __title__,
-    __description__,
-    __author__,
-    __author_email__,
-    __version__,
-    __url__
-)
-
+from types import ModuleType
 from . import (
     data_manipulation
 )
+
+
+__all__ = [
+    key
+    for key
+    in globals()
+    if isinstance(globals()[key], ModuleType)
+    and not key.startswith('_')
+]

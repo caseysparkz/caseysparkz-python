@@ -15,6 +15,7 @@ from csv import DictWriter
 from io import StringIO
 from locale import setlocale, LC_ALL
 from logging import getLogger
+from .Schema import Validate
 
 
 log = getLogger(__name__)                                   # Instantiate logger.
@@ -30,15 +31,11 @@ def to_csv(
     Dicts must all have the same keys in order for this function to pull the CSV headers.
         :param data:    A list of dicts to parse into CSV.
     '''
-    if isinstance(data, list):                              # Check if data structure is correct.
-        string_fh = StringIO()
+    if not Validate.list_of_dicts(data, common_keys=True):
+        raise ValueError('The parameter passed needs to be a list of dicts with common keys.')
 
-        try:
-            writer = DictWriter(string_fh, data[0].keys())
-        except IndexError:
-            log.exception('The data object contains no dictionaries.')
-    else:
-        raise ValueError('The parameter passed needs to be a list of dicts.')
+    string_fh = StringIO()
+    writer = DictWriter(string_fh, data[0].keys())
 
     writer.writeheader()
     writer.writerows(data)

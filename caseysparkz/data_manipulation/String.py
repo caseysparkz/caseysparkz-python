@@ -11,9 +11,9 @@
 '''String manipulation.'''
 
 
+from base64 import b64encode
 from locale import setlocale, LC_ALL
 from logging import getLogger
-from base64 import b64encode
 
 setlocale(LC_ALL, 'en_US.UTF-8')                                    # Set locale.
 

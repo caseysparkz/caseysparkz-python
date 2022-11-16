@@ -11,12 +11,13 @@
 '''Integer/float manipulation.'''
 
 
-import logging
-import locale
+from logging import getLogger
+from locale import setlocale, LC_ALL
 from typing import Union
 
-log = logging.getLogger(__name__)                                   # Enable logging.
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')                      # Set locale.
+log = getLogger(__name__)                                           # Enable logging.
+
+setlocale(LC_ALL, 'en_US.UTF-8')                                    # Set locale.
 
 
 def to_sig_fig_float(

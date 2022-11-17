@@ -9,12 +9,9 @@
 # Date:         November 15, 2022
 
 from . import (
-    checks,
-    data_manipulation
+    System
 )
 
-
-__all__ = [
-    'checks',
-    'data_manipulation'
+__all__ = [                                     # All relatively imported modules.
+    'System'
 ]

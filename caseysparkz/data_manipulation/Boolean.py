@@ -8,7 +8,7 @@
 # Author:       Casey Sparks
 # Date:         November 15, 2022
 # Description:
-'''Functions to manipulate bools.'''
+'''Boolean manipulation.'''
 
 
 from locale import setlocale, LC_ALL

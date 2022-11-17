@@ -8,7 +8,7 @@
 # Author:       Casey Sparks
 # Date:         November 15, 2022
 # Description:
-'''Functions to manipulate lists.'''
+'''List manipulation.'''
 
 
 from csv import DictWriter

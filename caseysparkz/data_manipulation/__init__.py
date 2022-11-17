@@ -7,8 +7,8 @@
 #                     |___/    |_|
 # Author:       Casey Sparks
 # Date:         November 15, 2022
+'''Methods for manipulating data structures.'''
 
-from types import ModuleType
 from . import (
     Boolean,
     Dict,
@@ -18,10 +18,11 @@ from . import (
     String
 )
 
-__all__ = [                                     # All relatively imported modules.
-    key
-    for key
-    in globals()
-    if isinstance(globals()[key], ModuleType)
-    and not key.startswith('_')
+__all__ = [
+    'Boolean',
+    'Dict',
+    'List',
+    'Number',
+    'Schema',
+    'String'
 ]

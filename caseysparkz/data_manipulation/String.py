@@ -48,4 +48,6 @@ def to_dict(
         in plaintext.split('object_separator')
     }
 
+    log.debug(output_dict)
+
     return output_dict

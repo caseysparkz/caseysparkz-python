@@ -10,7 +10,6 @@
 # Description:
 '''String manipulation.'''
 
-
 from base64 import b64encode
 from locale import setlocale, LC_ALL
 from logging import getLogger

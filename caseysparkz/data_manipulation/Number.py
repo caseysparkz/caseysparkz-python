@@ -10,7 +10,6 @@
 # Description:
 '''Integer/float manipulation.'''
 
-
 from logging import getLogger
 from locale import setlocale, LC_ALL
 from typing import Union

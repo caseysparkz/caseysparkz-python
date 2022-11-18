@@ -10,7 +10,6 @@
 # Description:
 '''Boolean manipulation.'''
 
-
 from locale import setlocale, LC_ALL
 from logging import getLogger
 from typing import Iterable

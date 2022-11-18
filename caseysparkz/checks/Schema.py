@@ -24,9 +24,9 @@ from schema import (
 )
 
 
-log = getLogger(__name__)                               # Instantiate logger.
+log = getLogger(__name__)                                           # Instantiate logger.
 
-setlocale(LC_ALL, 'en_US.UTF-8')                        # Set locale.
+setlocale(LC_ALL, 'en_US.UTF-8')                                    # Set locale.
 
 
 class Validate():
@@ -44,7 +44,7 @@ class Validate():
         log.debug(f'Data:\n{data}')
         log.debug(f'Schema:\n{schema}')
 
-        return schema.is_valid(data)                    # Validate the data against the schema.
+        return schema.is_valid(data)                                # Validate the data against the schema.
 
     @staticmethod
     def dict_contains_these_keys(
@@ -64,14 +64,14 @@ class Validate():
             in keys
         }
 
-        if not strict:                                  # Add optional arbitrary keys to dict.
+        if not strict:                                              # Add optional arbitrary keys to dict.
             data_schema = data_schema | {Optional(object): object}
 
         return Validate._arbitrary_schema(data, Schema(data_schema))
 
     @staticmethod
     def dict_of_dicts(
-        data: list,
+        data: dict,
         depth: int = 2,
         allowed_types: Iterable = (str, int, float)
             ) -> bool:
@@ -86,11 +86,37 @@ class Validate():
 
         else:
             type_class = Or(*allowed_types)
-            d = {type_class: {type_class: type_class}}  # Depth 1.
+            d = {type_class: {type_class: type_class}}              # Depth 1.
 
             log.debug(f'Building nested dict schema of depth {depth}.')
 
-            for i in range(depth - 1):              # Generate nested dicts of arbitrary depth.
+            for i in range(depth - 1):                              # Generate nested dicts of arbitrary depth.
+                data_schema = {type_class: d}
+
+        return Validate._arbitrary_schema(data, Schema(data_schema))
+
+    @staticmethod
+    def dict_of_lists(
+        data: list,
+        depth: int = 2,
+        allowed_types: Iterable = (str, int, float)
+            ) -> bool:
+        '''
+        Validate that a data object is a list of dictionaries.
+            :param data:            The object to validate.
+            :param depth:           The depth of nested dictionaries to permit. (Eg 2: {obj: {obj: obj}})
+            :param allowed_types:   Iterable containing allowed datatypes for keys (and leaf values).
+        '''
+        if depth < 2:
+            raise ValueError(':param data: must be nested dictionaries with minimun depth 2.')
+
+        else:
+            type_class = Or(*allowed_types)
+            d = {type_class: [type_class, Optional(type_class)]}    # Depth 1.
+
+            log.debug(f'Building nested dict schema of depth {depth}.')
+
+            for i in range(depth - 1):                              # Generate nested dicts of arbitrary depth.
                 data_schema = {type_class: d}
 
         return Validate._arbitrary_schema(data, Schema(data_schema))
@@ -106,15 +132,15 @@ class Validate():
             :param common_keys: Validate that every dictionary has identical keys.
         '''
         if common_keys:
-            schema = Schema(                            # List of flat dictionaries with common keys.
+            schema = Schema(                                        # List of flat dictionaries with common keys.
                 [{
                     key: object
                     for key
-                    in data[0].keys()                   # Base keys on first dict in list.
+                    in data[0].keys()                               # Base keys on first dict in list.
                 }]
             )
         else:
-            schema = Schema([dict])                     # List of dicts.
+            schema = Schema([dict])                                 # List of dicts.
 
         return Validate._arbitrary_schema(data, schema)
 
@@ -138,28 +164,28 @@ class Validate():
         check = set()
 
         # Check params are valid.
-        if (or_greater or or_less) and not depth:       # Invalid params.
+        if (or_greater or or_less) and not depth:                   # Invalid params.
             return log.critical('You cannot pass :or_greater: or :or_less: without also passing :depth:.')
 
-        elif or_greater and or_less:                    # Invalid params.
+        elif or_greater and or_less:                                # Invalid params.
             return log.critical('Params :or_greater: and :or_less: are mutually exclusive.')
 
-        else:                                           # Valid params.
+        else:                                                       # Valid params.
             pass
 
         # Iterate iterable and keep count of depth.
         for i in dict_str:
-            if i in {'{', '[', '('}:                    # Opening parethesis.
-                current_depth += 1                      # Increase count of current depth.
+            if i in {'{', '[', '('}:                                # Opening parethesis.
+                current_depth += 1                                  # Increase count of current depth.
 
                 if current_depth > max_depth:
-                    max_depth = current_depth           # Increase count of max depth.
+                    max_depth = current_depth                       # Increase count of max depth.
 
             elif i in {'{', '[', '('}:
-                current_depth -= 1                      # Decrease current depth.
+                current_depth -= 1                                  # Decrease current depth.
 
             else:
-                continue                                # Do nothing.
+                continue                                            # Do nothing.
 
         log.debug(f'Iterable depth: {max_depth}')
         log.debug(f'Iterable depth: {depth}')

@@ -10,12 +10,11 @@
 # Description:
 '''List manipulation.'''
 
-
 from csv import DictWriter
 from io import StringIO
 from locale import setlocale, LC_ALL
 from logging import getLogger
-from .Schema import Validate
+from ..checks.Schema import Validate
 
 
 log = getLogger(__name__)                                   # Instantiate logger.
@@ -28,6 +27,26 @@ def to_csv(
         ) -> str:
     '''
     Converts a list of dicts to CSV format.
+    Dicts must all have the same keys in order for this function to pull the CSV headers.
+        :param data:    A list of dicts to parse into CSV.
+    '''
+    if not Validate.list_of_dicts(data, common_keys=True):
+        raise ValueError('The parameter passed needs to be a list of dicts with common keys.')
+
+    string_fh = StringIO()
+    writer = DictWriter(string_fh, data[0].keys())
+
+    writer.writeheader()
+    writer.writerows(data)
+
+    return string_fh.getvalue()
+
+
+def to_tsv(
+    data: list
+        ) -> str:
+    '''
+    Converts a list of dicts to TSV format.
     Dicts must all have the same keys in order for this function to pull the CSV headers.
         :param data:    A list of dicts to parse into CSV.
     '''

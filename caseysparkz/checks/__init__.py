@@ -9,9 +9,11 @@
 # Date:         November 15, 2022
 
 from . import (
+    Schema,
     System
 )
 
 __all__ = [                                     # All relatively imported modules.
+    'Schema',
     'System'
 ]

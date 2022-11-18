@@ -7,6 +7,7 @@
 #                     |___/    |_|
 # Author:       Casey Sparks
 # Date:         November 15, 2022
+# Description:
 '''Methods for manipulating data structures.'''
 
 from . import (
@@ -14,7 +15,6 @@ from . import (
     Dict,
     List,
     Number,
-    Schema,
     String
 )
 
@@ -23,6 +23,5 @@ __all__ = [
     'Dict',
     'List',
     'Number',
-    'Schema',
     'String'
 ]

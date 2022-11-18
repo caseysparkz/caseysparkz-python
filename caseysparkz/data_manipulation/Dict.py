@@ -10,13 +10,12 @@
 # Description:
 '''Dictionary manipulation.'''
 
-
 from locale import setlocale, LC_ALL
 from logging import getLogger
 from io import StringIO
 from configparser import ConfigParser
 from dict2xml import dict2xml
-from .Schema import Validate
+from ..checks.Schema import Validate
 
 
 log = getLogger(__name__)                               # Instantiate parser.

@@ -31,7 +31,6 @@ setlocale(LC_ALL, 'en_US.UTF-8')                                    # Set locale
 
 class Validate():
     '''Validate various data schemas.'''
-    @staticmethod
     def _arbitrary_schema(
         data: Any,
         schema: Schema
@@ -189,6 +188,7 @@ class Validate():
 
         log.debug(f'Iterable depth: {max_depth}')
         log.debug(f'Iterable depth: {depth}')
+
         if depth:
             if or_greater:
                 check = depth <= max_depth

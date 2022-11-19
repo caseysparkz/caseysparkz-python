@@ -14,6 +14,7 @@ from csv import DictWriter
 from io import StringIO
 from locale import setlocale, LC_ALL
 from logging import getLogger
+from schema import SchemaError
 from ..checks.Schema import Validate
 
 
@@ -31,7 +32,7 @@ def to_csv(
         :param data:    A list of dicts to parse into CSV.
     '''
     if not Validate.list_of_dicts(data, common_keys=True):
-        raise ValueError('The parameter passed needs to be a list of dicts with common keys.')
+        raise SchemaError('The parameter passed needs to be a list of dicts with common keys.')
 
     string_fh = StringIO()
     writer = DictWriter(string_fh, data[0].keys())
@@ -51,7 +52,7 @@ def to_tsv(
         :param data:    A list of dicts to parse into CSV.
     '''
     if not Validate.list_of_dicts(data, common_keys=True):
-        raise ValueError('The parameter passed needs to be a list of dicts with common keys.')
+        raise SchemaError('The parameter passed needs to be a list of dicts with common keys.')
 
     string_fh = StringIO()
     writer = DictWriter(string_fh, data[0].keys())

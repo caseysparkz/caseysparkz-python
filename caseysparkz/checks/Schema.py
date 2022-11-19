@@ -14,11 +14,11 @@ from locale import setlocale, LC_ALL
 from logging import getLogger
 from typing import (
     Any,
-    Iterable,
-    Union
+    Iterable
 )
 from schema import (
     Schema,
+    SchemaError,
     Optional,
     Or
 )
@@ -81,7 +81,7 @@ class Validate():
             :param allowed_types:   Iterable containing allowed datatypes for keys (and leaf values).
         '''
         if depth < 2:
-            raise ValueError(':data: must be nested dictionaries with minimun depth 2.')
+            raise SchemaError(':data: must be nested dictionaries with minimun depth 2.')
 
         else:
             type_class = Or(*allowed_types)
@@ -107,7 +107,7 @@ class Validate():
             :param allowed_types:   Iterable containing allowed datatypes for keys (and leaf values).
         '''
         if depth < 2:
-            raise ValueError(':param data: must be nested dictionaries with minimun depth 2.')
+            raise SchemaError(':param data: must be nested dictionaries with minimun depth 2.')
 
         else:
             type_class = Or(*allowed_types)
@@ -144,62 +144,30 @@ class Validate():
         return Validate._arbitrary_schema(data, schema)
 
     @staticmethod
-    def nested_iterable_has_depth(
-        data: Iterable,
-        depth: Union[int, None] = None,
-        or_greater: bool = False,
-        or_less: bool = False
-            ) -> Union[int, bool]:
+    def max_iterable_depth(
+        data: Iterable
+            ) -> int:
         '''
-        Validate that a nested dictionary has a specified depth, or get the depth of a nested iterable.
+        Get the maximum depth of a nested iterable.
             :param data:        The iterable to check.
-            :param depth:       The depth to check for. Pass None to return the iterable's depth.
-            :param or_greater:  If True, return True if depth is greater than this param.
-            :param or_less:     If True, return True if depth is less than this param.
         '''
         dict_str = str(data)
         current_depth = 0
         max_depth = 0
-        check = set()
 
-        # Check params are valid.
-        if (or_greater or or_less) and not depth:                           # Invalid params.
-            return log.critical('You cannot pass :or_greater: or :or_less: without also passing :depth:.')
-
-        elif or_greater and or_less:                                        # Invalid params.
-            return log.critical('Params :or_greater: and :or_less: are mutually exclusive.')
-
-        else:                                                               # Valid params.
-            pass
-
-        # Iterate iterable and keep count of depth.
-        for i in dict_str:
-            if i in {'{', '[', '('}:                                        # Opening parethesis.
+        for char in dict_str:                                               # Iterate iterable and keep count of depth.
+            if char in {'{', '[', '('}:                                     # Opening parethesis.
                 current_depth += 1                                          # Increase count of current depth.
 
                 if current_depth > max_depth:
                     max_depth = current_depth                               # Increase count of max depth.
 
-            elif i in {'{', '[', '('}:
+            elif char in {'}', ']', ')'}:
                 current_depth -= 1                                          # Decrease current depth.
 
             else:
                 continue                                                    # Do nothing.
 
         log.debug(f'Iterable depth: {max_depth}')
-        log.debug(f'Iterable depth: {depth}')
 
-        if depth:
-            if or_greater:
-                check = depth <= max_depth
-
-            elif or_less:
-                check = depth >= max_depth
-
-            else:
-                check = depth == max_depth
-
-        else:
-            check = max_depth
-
-        return check
+        return max_depth

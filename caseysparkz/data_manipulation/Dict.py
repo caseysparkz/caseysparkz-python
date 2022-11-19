@@ -15,6 +15,7 @@ from logging import getLogger
 from io import StringIO
 from configparser import ConfigParser
 from dict2xml import dict2xml
+from schema import SchemaError
 from ..checks.Schema import Validate
 
 
@@ -52,7 +53,7 @@ def to_ini(
         return string_fh.getvalue()
 
     else:
-        raise ValueError(':param data: must be a flat dictionary.')
+        raise SchemaError(':param data: must be a flat dictionary.')
 
 
 def to_string(

@@ -14,5 +14,10 @@ __title__ = 'caseysparkz'
 __description__ = 'Library of methods and APIs I use a lot.'
 __author__ = 'caseyspar.kz'
 __author_email__ = 'python@caseyspar.kz'
-__version__ = '1.0.1'
+__version__ = '1.1.0'
 __url__ = 'https://github.com/caseysparkz/python-caseysparkz'
+__requirements__ = [
+    'ratelimit<3.0.0>=2.2.0',
+    'requests<3.0.0>=2.26.0',
+    'schema<1.0.0>=0.7.0'
+]

@@ -13,8 +13,30 @@ from . import (
     data_manipulation
 )
 
-
 __all__ = [
     'checks',
     'data_manipulation'
 ]
+
+
+# User-defined exceptions.
+class MutuallyInclusiveArgumentError(Exception):
+    def __init__(
+        self,
+        error_message: str = 'Arguments missing from function call.'
+            ):
+        '''Raises an exception if an argument is missing from a function.'''
+        self.error_message = error_message
+
+        super().__init__(self.error_message)
+
+
+class MutuallyExclusiveArgumentError(Exception):
+    def __init__(
+        self,
+        error_message: str = 'Arguments are mutually exclusive.'
+            ):
+        '''Raises an exception if two mutually exclusive arguments are passed to a function.'''
+        self.error_message = error_message
+
+        super().__init__(self.error_message)

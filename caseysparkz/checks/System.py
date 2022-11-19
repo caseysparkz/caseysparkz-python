@@ -27,8 +27,8 @@ class Check():
             ) -> bool:
         '''
         Check that a process is running on the system.
-            :param process_name:    The name of the process to check for.
+            :param process_name:    The (case-sensitive) name of the process to check for.
         '''
         log.debug(f'Checking for process {process_name}.')
 
-        return process_name.lower() in [proc.name().lower() for proc in process_iter()]
+        return process_name in [proc.name() for proc in process_iter()]

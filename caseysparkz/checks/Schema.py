@@ -121,6 +121,16 @@ class Validate():
         return Validate._arbitrary_schema(data, Schema(data_schema))
 
     @staticmethod
+    def list_items_unique(
+        list_obj: list
+            ) -> bool:
+        '''
+        Validate that a list contains no duplicate items.
+            :param list_obj:    The list to check for duplicates.
+        '''
+        return len(set(list_obj)) == len(list_obj)
+
+    @staticmethod
     def list_of_dicts(
         data: list,
         common_keys: bool = False

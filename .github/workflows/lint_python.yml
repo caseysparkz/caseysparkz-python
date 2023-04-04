@@ -46,7 +46,14 @@ jobs:
                 # * W0212 - Access to a protected member of a client class.
                 # * W1203 - Use lazy % formatting in logging functions.
 
+    install:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ["3.10"]
+
             - name: Install caseysparkz-python
               run: |
-                  pip install git+https://github.com/caseysparkz/caseysparkz-python
+                  python -m pip                                         \
+                    install git+https://github.com/caseysparkz/caseysparkz-python
 ...

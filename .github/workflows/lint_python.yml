@@ -42,5 +42,7 @@ jobs:
                 --disable                       \
                     R0801                       \                           # Duplicate code.
                     R0903                       \                           # Too few public methods.
+                    W0102                       \                           # Logging f-string interpolation.
+                    W0212                       \                           # Logging f-string interpolation.
                     W1203                       \                           # Logging f-string interpolation.
                 $(git ls-files "*.py")

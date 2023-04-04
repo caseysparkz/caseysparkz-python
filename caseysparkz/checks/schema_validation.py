@@ -8,8 +8,9 @@
 from locale import setlocale, LC_ALL
 from logging import getLogger
 from typing import (
-    Any,
-    Iterable
+    Any as AnyType,
+    Iterable as IterableType,
+    Optional as OptionalType
 )
 from schema import (
     Optional,
@@ -28,7 +29,7 @@ class ValidateSchema():
     '''Validate various data schemas.'''
     @staticmethod
     def arbitrary_schema(
-        data: Any,
+        data: AnyType,
         schema: Schema
             ) -> bool:
         '''
@@ -70,25 +71,30 @@ class ValidateSchema():
     def dict_of_dicts(
         data: dict,
         depth: int = 2,
-        allowed_types: set = {str, int, float}
+        allowed_types: OptionalType[set] = None
             ) -> bool:
         '''
         Validate that a data object is a list of dictionaries.
             :param data:            The object to validate.
             :param depth:           The depth of nested dictionaries to permit. (Eg 2: {obj: {obj: obj}})
             :param allowed_types:   Set containing allowed datatypes for keys (and leaf values).
-            :return:        Boolean with the validity of the dict.
+            :return:                Boolean with the validity of the dict.
         '''
         if depth < 2 or not isinstance(data, dict):
             raise SchemaError(':data: must be nested dictionaries with minimun depth 2.')
 
+        if not allowed_types:
+            allowed_types = {str, int, float}
+
         type_class = Or(*allowed_types)
         data_schema = {type_class: {type_class: type_class}}            # Depth 1.
+        current_schema_depth = 1
 
         log.debug(f'Building nested dict schema of depth {depth}.')
 
-        for i in range(depth - 1):                                      # Generate nested dicts of arbitrary depth.
+        while current_schema_depth < depth:                                 # Generate nested dicts of arbitrary depth.
             data_schema = {type_class: data_schema}
+            current_schema_depth += 1
 
         return ValidateSchema.arbitrary_schema(data, Schema(data_schema))
 
@@ -96,25 +102,30 @@ class ValidateSchema():
     def dict_of_lists(
         data: list,
         depth: int = 2,
-        allowed_types: set = {str, int, float}
+        allowed_types: OptionalType[set] = None
             ) -> bool:
         '''
         Validate that a data object is a list of dictionaries.
             :param data:            The object to validate.
             :param depth:           The depth of nested dictionaries to permit. (Eg 2: {obj: {obj: obj}})
             :param allowed_types:   Set containing allowed datatypes for keys (and leaf values).
-            :return:        Boolean with the validity of the dict.
+            :return:                Boolean with the validity of the dict.
         '''
         if depth < 2:
             raise SchemaError(':param data: must be nested dictionaries with minimun depth 2.')
 
+        if not allowed_types:
+            allowed_types = {str, int, float}
+
         type_class = Or(*allowed_types)
         data_schema = {type_class: [type_class, Optional(type_class)]}      # Depth 1.
+        current_schema_depth = 1
 
         log.debug(f'Building nested dict schema of depth {depth}.')
 
-        for i in range(depth - 1):                                          # Generate nested dicts of arbitrary depth.
+        while current_schema_depth < depth:                                 # Generate nested dicts of arbitrary depth.
             data_schema = {type_class: data_schema}
+            current_schema_depth += 1
 
         return ValidateSchema.arbitrary_schema(data, Schema(data_schema))
 
@@ -125,7 +136,7 @@ class ValidateSchema():
         '''
         Validate that a list contains no duplicate items.
             :param list_obj:    The list to check for duplicates.
-            :return:        Boolean with the validity of the list.
+            :return:            Boolean with the validity of the list.
         '''
         return len(set(list_obj)) == len(list_obj)
 
@@ -138,7 +149,7 @@ class ValidateSchema():
         Validate that a data object is a list of flat dictionaries.
             :param data:        The object to validate.
             :param common_keys: Validate that every dictionary has identical keys.
-            :return:        Boolean with the validity of the list.
+            :return:            Boolean with the validity of the list.
         '''
         if common_keys:
             schema = Schema([{                                                # List of flat dicts with common keys.
@@ -153,16 +164,16 @@ class ValidateSchema():
 
     @staticmethod
     def max_iterable_depth(
-        data: Iterable
+        data: IterableType
             ) -> int:
         '''
         Get the maximum depth of a nested iterable.
-            :param data:        The iterable to check.
-            :return:            Maximum depth found in the iterable.
+            :param data:    The iterable to check.
+            :return:        Maximum depth found in the iterable.
         '''
         current_depth = 0
         max_depth = 0
-        open_parens = {'(', '{', '['}
+        open_parens = {'(', '{', '['}                                       # Possible opening parens.
         paren_stack = ''.join(                                              # Produces str like '[{()()}{[]}]'.
             char
             for char

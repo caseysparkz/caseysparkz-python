@@ -8,8 +8,7 @@
 #                     |___/    |_|
 # Author:       Casey Sparks
 # Date:         November 15, 2022
-# Notes:        Do not update this file directly. Rather, make changes to caseysparkz/__version__.py.
-# Description:
+# Notes:        Do not update this file directly. Rather, make changes to `caseysparkz/__init__.py`.
 '''Library of methods and APIs I use a lot.'''
 
 from setuptools import (

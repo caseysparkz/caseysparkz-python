@@ -7,12 +7,25 @@
 #                     |___/    |_|
 # Author:       Casey Sparks
 # Date:         November 15, 2022
+'''Python tooling that I use a lot.'''
 
 from . import (
     checks,
     data_manipulation
 )
 
+__title__ = 'caseysparkz'
+__description__ = 'Library of methods and APIs I use a lot.'
+__author__ = 'caseyspar.kz'
+__author_email__ = 'python@caseyspar.kz'
+__url__ = 'https://github.com/caseysparkz/python-caseysparkz'
+__version__ = '2.0.0'
+__licence__ = 'GPL-2.0-or-later'
+__python_requires__ = '>=3.10'
+__requirements__ = [
+    'dict2xml>=1.7.3,<2.0.0',
+    'schema<1.0.0>=0.7.0'
+]
 __all__ = [
     'checks',
     'data_manipulation'
@@ -21,22 +34,24 @@ __all__ = [
 
 # User-defined exceptions.
 class MutuallyInclusiveArgumentError(Exception):
+    '''Raises an exception if an argument is missing from a function.'''
     def __init__(
         self,
         error_message: str = 'Arguments missing from function call.'
             ):
-        '''Raises an exception if an argument is missing from a function.'''
-        self.error_message = error_message
-
-        super().__init__(self.error_message)
+        '''
+            :param error_message: The message to raise with the exception.
+        '''
+        super().__init__(error_message)
 
 
 class MutuallyExclusiveArgumentError(Exception):
+    '''Raises an exception if two mutually exclusive arguments are passed to a function.'''
     def __init__(
         self,
         error_message: str = 'Arguments are mutually exclusive.'
             ):
-        '''Raises an exception if two mutually exclusive arguments are passed to a function.'''
-        self.error_message = error_message
-
-        super().__init__(self.error_message)
+        '''
+            :param error_message: The message to raise with the exception.
+        '''
+        super().__init__(error_message)

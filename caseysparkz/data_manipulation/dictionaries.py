@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#   ___ __ _ ___  ___ _   _ ___ _ __   __ _ _ __| | __ ____
-#  / __/ _` / __|/ _ \ | | / __| '_ \ / _` | '__| |/ /|_  /
-# | (_| (_| \__ \  __/ |_| \__ \ |_) | (_| | | _|   <  / /
-#  \___\__,_|___/\___|\__, |___/ .__/ \__,_|_|(_)_|\_\/___|
-#                     |___/    |_|
 # Author:       Casey Sparks
 # Date:         November 15, 2022
 # Description:
@@ -16,12 +11,12 @@ from io import StringIO
 from configparser import ConfigParser
 from dict2xml import dict2xml
 from schema import SchemaError
-from ..checks.Schema import Validate
+from ..checks.schema_validation import ValidateSchema
 
 
-log = getLogger(__name__)                               # Instantiate parser.
+log = getLogger(__name__)                                                   # Instantiate parser.
 
-setlocale(LC_ALL, 'en_US.UTF-8')                        # Set locale.
+setlocale(LC_ALL, 'en_US.UTF-8')                                            # Set locale.
 
 
 def to_html(
@@ -30,6 +25,7 @@ def to_html(
     '''
     Converts a dictionary to a single string with user-defined delineators.
         :param data:    The dictionary to format into INI.
+        :return:        HTML-data of dict.
     '''
     return dict2xml(data)
 
@@ -42,8 +38,9 @@ def to_ini(
     Converts a dictionary to a single string with user-defined delineators.
         :param data:                    The dictionary to format into INI.
         :param space_around_delimiters: Surround key/value delimiters with spaces.
+        :return:                        INI of dict.
     '''
-    if Validate.dict_of_dicts(data, depth=2):
+    if ValidateSchema.dict_of_dicts(data, depth=2):
         config = ConfigParser()
         config._sections = data
         string_fh = StringIO()
@@ -52,8 +49,7 @@ def to_ini(
 
         return string_fh.getvalue()
 
-    else:
-        raise SchemaError(':param data: must be a flat dictionary.')
+    raise SchemaError(':param data: must be a flat dictionary.')
 
 
 def to_string(
@@ -66,6 +62,7 @@ def to_string(
         :param data:                The dictionary to format into a string.
         :param kv_separator:        The string separating keys and values.
         :param object_separator:    The string separating key/value pairs.
+        :return:                    Bash-like dict of K/V pairs.
     '''
     return object_separator.join([f'{key}{kv_separator}{data[key]}' for key in data])
 
@@ -76,5 +73,6 @@ def to_xml(
     '''
     Converts a dictionary to a single string with user-defined delineators.
         :param data:    The dictionary to format into INI.
+        :return:        XML data of dict.
     '''
     return dict2xml(data)

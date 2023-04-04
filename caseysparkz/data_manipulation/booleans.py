@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-#   ___ __ _ ___  ___ _   _ ___ _ __   __ _ _ __| | __ ____
-#  / __/ _` / __|/ _ \ | | / __| '_ \ / _` | '__| |/ /|_  /
-# | (_| (_| \__ \  __/ |_| \__ \ |_) | (_| | | _|   <  / /
-#  \___\__,_|___/\___|\__, |___/ .__/ \__,_|_|(_)_|\_\/___|
-#                     |___/    |_|
 # Author:       Casey Sparks
 # Date:         November 15, 2022
 # Description:
@@ -15,9 +10,9 @@ from logging import getLogger
 from typing import Iterable
 
 
-log = getLogger(__name__)                                   # Instantiate logger.
+log = getLogger(__name__)                                                   # Instantiate logger.
 
-setlocale(LC_ALL, 'en_US.UTF-8')                            # Set locale.
+setlocale(LC_ALL, 'en_US.UTF-8')                                            # Set locale.
 
 
 def none(
@@ -26,5 +21,6 @@ def none(
     '''
     The opposite of the any() built-in; returns True if the iterable contains no True elements.
         :param boolean_iterable:    An iterable containing elements to be assessed as booleans.
+        :return:                    Returns True if non in iterable are True else False.
     '''
     return not any(boolean_iterable)

@@ -16,20 +16,27 @@ from setuptools import (
     find_packages,
     setup
 )
-from caseysparkz import __version__
+from caseysparkz.__init__ import (
+    __title__,
+    __description__,
+    __author__,
+    __author_email__,
+    __url__,
+    __version__,
+    __licence__,
+    __python_requires__,
+    __requirements__
+)
 
 setup(
-    name=__version__.__title__,
-    description=__version__.__description__,
-    author=__version__.__author__,
-    author_email=__version__.__author_email__,
-    version=__version__.__version__,
-    url=__version__.__url__,
-    install_requires=__version__.__requirements__,
-    packages=find_packages(
-        include=[
-            __version__.__title__,
-            f'{__version__.__title__}.*'
-        ]
-    )
+    name=__title__,
+    description=__description__,
+    author=__author__,
+    author_email=__author_email__,
+    version=__version__,
+    licence=__licence__,
+    url=__url__,
+    install_requires=__requirements__,
+    python_requires=__python_requires__,
+    packages=find_packages(include=[__title__, f'{__title__}.*'])
 )

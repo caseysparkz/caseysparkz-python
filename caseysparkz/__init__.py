@@ -25,7 +25,7 @@ __python_requires__ = '>=3.10'
 __requirements__ = [
     'dict2xml>=1.7.3,<2.0.0',
     'psutil>=5.9.4,<6.0.0',
-    'schema<1.0.0>=0.7.0'
+    'schema>=0.7.0,<1.0.0'
 ]
 __all__ = [
     'checks',

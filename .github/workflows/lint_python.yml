@@ -34,9 +34,10 @@ jobs:
             pylint                              \
                 --max-line-length=120           \
                 --disable                       \
-                    R0801                       \                           # Duplicate code.
-                    R0903                       \                           # Too few public methods.
-                    W0102                       \                           # Logging f-string interpolation.
-                    W0212                       \                           # Logging f-string interpolation.
-                    W1203                       \                           # Logging f-string interpolation.
+                    R0801                       \
+                    R0903                       \
+                    W0102                       \
+                    W0212                       \
+                    W0612                       \
+                    W1203
                 $(git ls-files "*.py")

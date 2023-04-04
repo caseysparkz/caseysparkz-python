@@ -24,6 +24,7 @@ __licence__ = 'GPL-2.0-or-later'
 __python_requires__ = '>=3.10'
 __requirements__ = [
     'dict2xml>=1.7.3,<2.0.0',
+    'psutil>=5.9.4,<6.0.0',
     'schema<1.0.0>=0.7.0'
 ]
 __all__ = [

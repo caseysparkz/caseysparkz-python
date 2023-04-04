@@ -45,4 +45,8 @@ jobs:
                 # * R0903 - Too few public methods.
                 # * W0212 - Access to a protected member of a client class.
                 # * W1203 - Use lazy % formatting in logging functions.
+
+            - name: Install caseysparkz-python
+              run: |
+                  pip install git+https://github.com/caseysparkz/caseysparkz-python
 ...

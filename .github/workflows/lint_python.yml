@@ -31,13 +31,7 @@ jobs:
 
         - name: Lint code with PyLint
           run: |
-            pylint                              \
-                --max-line-length=120           \
-                --disable                       \
-                    R0801                       \
-                    R0903                       \
-                    W0102                       \
-                    W0212                       \
-                    W0612                       \
-                    W1203
+            pylint                                                      \
+                --max-line-length=120                                   \
+                --disable R0801,R0903,W0102,W0212,W0612,W1203           \
                 $(git ls-files "*.py")

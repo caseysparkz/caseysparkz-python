@@ -21,7 +21,7 @@ from schema import (
 )
 
 
-log = getLogger(__name__)                                                   # Instantiate logger.
+LOG = getLogger(__name__)                                                   # Instantiate logger.
 
 setlocale(LC_ALL, 'en_US.utf-8')                                            # Set locale.
 
@@ -37,10 +37,12 @@ class ValidateSchema():
         ValidateSchema an arbitrary data object against a user-defined schema.
             :param data:    The data object to validate.
             :param schema:  The data schema to match.
-            :return:        Boolean with the validity of the dict.
+            :return:        Boolean with the validity of the data schema.
         '''
-        log.debug(f'Data:\n{data}')
-        log.debug(f'Schema:\n{schema}')
+        assert isinstance(schema, Schema), '`schema` must be Schema().'
+
+        LOG.debug(f'Data:\n{data}')
+        LOG.debug(f'Schema:\n{schema}')
 
         return schema.is_valid(data)                                        # Validate the data against the schema.
 
@@ -57,7 +59,7 @@ class ValidateSchema():
             :param strict:  Flag to ensure that the dictionary contains no additional keys.
             :return:        Boolean with the validity of the dict.
         '''
-        data_schema = {
+        data_schema = {                                                     # Dict of specified keys, arbitrary values.
             key: object
             for key
             in keys
@@ -81,17 +83,23 @@ class ValidateSchema():
             :param allowed_types:   Set containing allowed datatypes for keys (and leaf values).
             :return:                Boolean with the validity of the dict.
         '''
-        if depth < 2 or not isinstance(data, dict):
+        is_dict = isinstance(data, dict)
+        min_depth = depth >= 2
+
+        assert is_dict, '`data` must be dict.'
+        assert min_depth, '`depth` must be >= 2.'
+
+        if not all([is_dict, min_depth]):
             raise SchemaError(':data: must be nested dictionaries with minimun depth 2.')
 
         if not allowed_types:
             allowed_types = {str, int, float}
 
         type_class = Or(*allowed_types)
-        data_schema = {type_class: {type_class: type_class}}            # Depth 1.
-        current_schema_depth = 1
+        data_schema = {type_class: {type_class: type_class}}                # Depth 1.
+        current_schema_depth = 2
 
-        log.debug(f'Building nested dict schema of depth {depth}.')
+        LOG.debug(f'Building nested dict schema of depth {depth}.')
 
         while current_schema_depth < depth:                                 # Generate nested dicts of arbitrary depth.
             data_schema = {type_class: data_schema}
@@ -121,19 +129,19 @@ class ValidateSchema():
             :param common_keys: Validate that every dictionary has identical keys.
             :return:            Boolean with the validity of the list.
         '''
-        list_item_is_dict = [isinstance(item, dict) for item in data]
+        list_items_are_dicts = [isinstance(item, dict) for item in data]
+        keys_identical = [item.keys() == data[0].keys() for item in data]
 
         assert isinstance(data, list), '`data` must be list.'
-        assert all(list_item_is_dict), '`data` must contain only dicts.'
+        assert all(list_items_are_dicts), '`data` must contain only dicts.'
 
         if common_keys:
-            dict_keys_are_common = [item.keys() == data[0].keys() for item in data]
-            assert all(dict_keys_are_common), 'All `data` dict keys must be identical.'
+            assert all(keys_identical), 'All `data` dict keys must be identical.'
 
-            schema = Schema([{                                                # List of flat dicts with common keys.
+            schema = Schema([{                                              # List of flat dicts with common keys.
                 key: object
                 for key
-                in data[0].keys()                                       # Base keys on first dict in list.
+                in data[0].keys()                                           # Base keys on first dict in list.
             }])
         else:
             schema = Schema([dict])                                         # List of dicts.
@@ -152,14 +160,14 @@ class ValidateSchema():
         current_depth = 0
         max_depth = 0
         open_parens = {'(', '{', '['}                                       # Possible opening parens.
-        paren_stack = ''.join(                                              # Produces str like '[{()()}{[]}]'.
+        paren_str = ''.join(                                                # Produces str like '[{()()}{[]}]'.
             char
             for char
-            in str(data)
+            in str(data)                                                    # Convert arbitrary type to str.
             if char in open_parens.union({')', '}', ']'})                   # All possible opening/closing parens.
         )
 
-        for char in paren_stack:                                            # Iterate iterable and keep count of depth.
+        for char in paren_str:                                              # Iterate iterable and keep count of depth.
             if char in open_parens:
                 current_depth += 1                                          # Increase count of current depth.
                 max_depth = max(max_depth, current_depth)                   # Set max depth.
@@ -167,9 +175,9 @@ class ValidateSchema():
             else:
                 current_depth -= 1                                          # Decrease current depth.
 
-        if current_depth > 0:                                               # Total closing should = total opening.
+        if current_depth != 0:                                              # Total closing should = total opening.
             raise StopIteration(f'Iterable is invalid. Depth: {current_depth}')
 
-        log.debug(f'Maximum iterable depth: {max_depth}')
+        LOG.debug(f'Maximum iterable depth: {max_depth}')
 
         return max_depth

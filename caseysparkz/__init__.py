@@ -9,6 +9,7 @@
 # Date:         November 15, 2022
 '''Python tooling that I use a lot.'''
 
+from types import ModuleType
 from typing import List
 from . import (
     checks,
@@ -16,8 +17,11 @@ from . import (
 )
 
 __all__ = [
-    'checks',
-    'data_manipulation'
+    key
+    for key
+    in globals()
+    if isinstance(globals()[key], ModuleType)
+    and not key.startswith('_')
 ]
 
 

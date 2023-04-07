@@ -6,6 +6,7 @@
 # | (_| (_| \__ \  __/ |_| \__ \ |_) | (_| | | _|   <  / /
 #  \___\__,_|___/\___|\__, |___/ .__/ \__,_|_|(_)_|\_\/___|
 #                     |___/    |_|
+#
 # Author:       Casey Sparks
 # Date:         November 15, 2022
 '''Library of methods and APIs I use a lot.'''
@@ -24,7 +25,7 @@ LICENSE = 'GPL-2.0-or-later'
 PACKAGES = find_packages(include=[NAME, f'{NAME}.*'])
 PYTHON_REQUIRES = '>=3.10'
 URL = 'https://github.com/caseysparkz/python-caseysparkz'
-VERSION = '0.0.1'                                                           # Increment version.
+VERSION = '0.0.2'                                                           # Increment version.
 INSTALL_REQUIRES = [                                                        # Update requirements.
     'dict2xml>=1.7.3,<2.0.0',
     'psutil>=5.9.4,<6.0.0',

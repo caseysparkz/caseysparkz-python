@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Author:       Casey Sparks
+# Date:         April 10, 2023
+# Description:  Test Python scripts.
+
+pylint $(git ls-files "*.py")                                                   \
+    --max-line-length=120                                                       \
+    --disable=R0801,R0903,W0212,W1203
+    # duplicate-code
+    # too-few-public-methods
+    # protected-access
+    # logging-fstring-interpolation

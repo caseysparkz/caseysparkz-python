@@ -25,7 +25,7 @@ LICENSE = 'GPL-2.0-or-later'
 PACKAGES = find_packages(include=[NAME, f'{NAME}.*'])
 PYTHON_REQUIRES = '>=3.10'
 URL = 'https://github.com/caseysparkz/python-caseysparkz'
-VERSION = '0.0.3'                                                           # Increment version.
+VERSION = '0.1.4'                                                           # Increment version.
 INSTALL_REQUIRES = [                                                        # Update requirements.
     'dict2xml>=1.7.3,<2.0.0',
     'psutil>=5.9.4,<6.0.0',

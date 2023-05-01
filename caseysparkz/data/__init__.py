@@ -6,17 +6,15 @@
 '''Methods for manipulating data structures.'''
 
 from . import (
-    booleans,
-    dictionaries,
-    lists,
-    numbers,
-    strings
+    dictionary,
+    iterable,
+    number,
+    string
 )
 
 __all__ = [
-    'booleans',
-    'dictionaries',
-    'lists',
-    'numbers',
-    'strings'
+    'dictionary',
+    'iterable',
+    'number',
+    'string'
 ]
